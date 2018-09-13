@@ -30,6 +30,29 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func recordAndRecognizeSpeech(){
+        let node = audioEngine.inputNode
+        let recordingFormat = node.outputFormat(forBus: 0)
+        node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat){buffer, _ in
+            self.request.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        do{
+            try audioEngine.start()
+        } catch{
+            return print(error)
+        }
+        
+        guard let myRecognizer = SFSpeechRecognizer() else{
+            return
+        }
+        if !myRecognizer.isAvailable{
+            return
+        }
+        
+    }
 
 
 }
