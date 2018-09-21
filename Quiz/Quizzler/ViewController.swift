@@ -2,8 +2,6 @@
 //  ViewController.swift
 //  Quizzler
 //
-//  Created by Angela Yu on 25/08/2015.
-//  Copyright (c) 2015 London App Brewery. All rights reserved.
 //
 
 import UIKit
@@ -12,6 +10,7 @@ class ViewController: UIViewController {
     
     let allQuestions = QuestionBank()
     var pickedAnswer : Bool = false
+    var questionNumber : Int = 0
     
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
@@ -34,6 +33,9 @@ class ViewController: UIViewController {
             pickedAnswer = false
         }
         checkAnswer()
+
+        nextQuestion()
+        
     }
     
     
@@ -44,16 +46,34 @@ class ViewController: UIViewController {
 
     func nextQuestion() {
         
+        if(questionNumber < 12){
+            questionNumber =  questionNumber + 1
+            questionLabel.text = allQuestions.list[questionNumber].questionText
+        } else{
+            let alert = UIAlertController(title: "Hey", message: "You wanna start again?", preferredStyle: .alert)
+            
+            let restartAction = UIAlertAction(title: "Restart", style: .default) { (UIAlertAction) in
+                
+                self.startOver()
+                
+            }
+            
+            alert.addAction(restartAction)
+            
+            present(alert, animated: true, completion: nil)
+            
+        }
+
     }
     
     
     func checkAnswer() {
-        let correctAnswer = allQuestions.list[0].answer
+        let correctAnswer = allQuestions.list[questionNumber].answer
     }
     
     
     func startOver() {
-       
+       questionNumber = 0
     }
     
 
